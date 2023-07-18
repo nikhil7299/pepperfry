@@ -1,10 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pepperfry/constants/app_constants.dart';
 import 'package:pepperfry/core/auth_message.dart';
 import 'package:pepperfry/core/enums.dart';
-import 'package:pepperfry/core/type_defs.dart';
 import 'package:pepperfry/features/auth/controller/auth_controller.dart';
 import 'package:http/http.dart' as http;
 import 'package:pepperfry/main.dart';
@@ -59,16 +57,30 @@ class AuthAPI {
         },
       );
       'check ${res.statusCode}'.log();
-      if (res.statusCode == 201) {
-        return AuthResult.success;
+      switch (res.statusCode) {
+        case 201:
+          return AuthResult(
+            authStatus: AuthStatus.success,
+            message: jsonDecode(res.body)['msg'],
+          );
+        case 401:
+          return AuthResult(
+            authStatus: AuthStatus.failure,
+            message: jsonDecode(res.body)['msg'],
+          );
+
+        default:
+          return AuthResult(
+            authStatus: AuthStatus.error,
+            message: jsonDecode(res.body)['error'],
+          );
       }
-      if (res.statusCode == 401) {
-        return AuthResult.failure;
-      }
-      return AuthResult.error;
     } catch (e) {
       ' error ${e.toString()}'.log();
-      return AuthResult.error;
+      return const AuthResult(
+        authStatus: AuthStatus.success,
+        message: "Unexpected Error Occured",
+      );
     }
   }
 
@@ -87,23 +99,37 @@ class AuthAPI {
         },
       );
       'res status code ${res.statusCode}'.log();
-      if (res.statusCode == 200) {
-        _ref.read(userInfoStateProvider.notifier).setUser(jsonEncode(
-              jsonDecode(res.body)['user'],
-            ));
-        prefs.setString('x-auth-token', jsonDecode(res.body)['token']);
-        return AuthResult.success;
-      } else if (res.statusCode == 400) {
-        return AuthResult.failure;
-      }
+      switch (res.statusCode) {
+        case 200:
+          _ref.read(userInfoStateProvider.notifier).setUser(jsonEncode(
+                jsonDecode(res.body)['user'],
+              ));
+          prefs.setString('x-auth-token', jsonDecode(res.body)['token']);
+          return AuthResult(
+            authStatus: AuthStatus.success,
+            message: jsonDecode(res.body)['msg'],
+          );
+        case 400:
+          return AuthResult(
+            authStatus: AuthStatus.failure,
+            message: jsonDecode(res.body)['msg'],
+          );
 
-      return AuthResult.error;
+        default:
+          return AuthResult(
+            authStatus: AuthStatus.error,
+            message: jsonDecode(res.body)['error'],
+          );
+      }
     } catch (e) {
-      return AuthResult.error;
+      return const AuthResult(
+        authStatus: AuthStatus.success,
+        message: 'Unexpected Error Occured',
+      );
     }
   }
 
-  Future<AuthMessage> signUpUser({
+  Future<AuthResult> signUpUser({
     required String phone,
     required String otp,
     required String name,
@@ -127,26 +153,26 @@ class AuthAPI {
                 jsonDecode(res.body)['user'],
               ));
           prefs.setString('x-auth-token', jsonDecode(res.body)['token']);
-          return AuthMessage(
-            authResult: AuthResult.success,
+          return AuthResult(
+            authStatus: AuthStatus.success,
             message: jsonDecode(res.body)['msg'],
           );
         case 400:
           //msg - OTP Incorrect, Please try again | User with this Email already exists
-          return AuthMessage(
-            authResult: AuthResult.failure,
+          return AuthResult(
+            authStatus: AuthStatus.failure,
             message: jsonDecode(res.body)['msg'],
           );
 
         default:
-          return AuthMessage(
-            authResult: AuthResult.error,
+          return AuthResult(
+            authStatus: AuthStatus.error,
             message: jsonDecode(res.body)['error'],
           );
       }
     } catch (e) {
-      return const AuthMessage(
-        authResult: AuthResult.error,
+      return const AuthResult(
+        authStatus: AuthStatus.error,
         message: "Unexpected Error Occured",
       );
     }

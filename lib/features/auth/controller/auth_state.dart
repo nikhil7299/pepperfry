@@ -3,20 +3,20 @@ import 'package:pepperfry/core/enums.dart';
 
 @immutable
 class AuthState {
-  final AuthResult? result;
+  final AuthStatus? status;
   final bool isLoading;
 
   const AuthState({
-    required this.result,
+    required this.status,
     required this.isLoading,
   });
 
   const AuthState.unknown()
-      : result = null,
+      : status = null,
         isLoading = false;
 
   AuthState copiedWithIsLoading(bool isLoading) =>
-      AuthState(result: result, isLoading: isLoading);
+      AuthState(status: status, isLoading: isLoading);
 
 // objects can be different, even if their value inside is same,
 // this makes sure to find if the objects are equal or not
@@ -25,16 +25,16 @@ class AuthState {
 // we check internal values are same or not and then return true
 
   @override
-  String toString() => 'AuthState (AuthResult: $result, isLoading: $isLoading)';
+  String toString() => 'AuthState (AuthStatus: $status, isLoading: $isLoading)';
 
   @override
   bool operator ==(covariant AuthState other) =>
       identical(this, other) ||
-      (result == other.result && isLoading == other.isLoading);
+      (status == other.status && isLoading == other.isLoading);
 
   @override
   int get hashCode => Object.hash(
-        result,
+        status,
         isLoading,
       );
 }

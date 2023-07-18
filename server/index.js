@@ -13,9 +13,10 @@ const DB = process.env.MONGO_URL;
 
 app.use(express.json());
 app.use(authRouter);
+mongoose.set(`strictQuery`, true);
 
 mongoose
-	.connect(DB)
+	.connect(DB, {})
 	.then(() => console.log("Connection Successful"))
 	.catch((e) => console.log(e));
 

@@ -14,7 +14,7 @@ final isLoadingProvider = Provider<bool>((ref) {
 final isLoggedInProvider = Provider<bool>((ref) {
   final authState = ref.watch(authStateProvider);
   // print('${authState.result} ${authState.userId}');
-  return authState.result == AuthResult.success;
+  return authState.status == AuthStatus.success;
 });
 
 //? AUTH STATE
@@ -41,7 +41,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = state.copiedWithIsLoading(true);
     final res = await _authAPI.setAuthUser(token);
     if (res) {
-      state = const AuthState(result: AuthResult.success, isLoading: false);
+      state = const AuthState(status: AuthStatus.success, isLoading: false);
       return;
     }
 
@@ -49,21 +49,24 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
   Future<bool> checkUser(String identifier, BuildContext context) async {
-    //TODO return false- to register user
-    // return false;
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     state = state.copiedWithIsLoading(true);
-    final result = await _authAPI.checkUser(identifier);
+    final authResult = await _authAPI.checkUser(identifier);
     state = state.copiedWithIsLoading(false);
-    if (result == AuthResult.success) {
-      return true;
-    } else if (result == AuthResult.error) {
+    if (authResult.authStatus == AuthStatus.success) {
       scaffoldMessenger.showSnackBar(
-        const SnackBar(
-          content: Text("Unexpected error occured"),
+        SnackBar(
+          content: Text(authResult.message),
         ),
       );
+      return true;
     }
+    scaffoldMessenger.showSnackBar(
+      SnackBar(
+        content: Text(authResult.message),
+      ),
+    );
+
     return false;
   }
 
@@ -75,28 +78,17 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     final navigator = Navigator.of(context, rootNavigator: true);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     state = state.copiedWithIsLoading(true);
-    final result = await _authAPI.verifyPhone(phone: phone, otp: otp);
+    final authResult = await _authAPI.verifyPhone(phone: phone, otp: otp);
 
-    state = AuthState(result: result, isLoading: false);
-
-    switch (result) {
-      case AuthResult.success:
-        navigator.pop();
-        return;
-      case AuthResult.failure:
-        scaffoldMessenger.showSnackBar(
-          const SnackBar(
-            content: Text("Incorrect OTP, try again"),
-          ),
-        );
-        return;
-      default:
-        scaffoldMessenger.showSnackBar(
-          const SnackBar(
-            content: Text("Unexpected error occured"),
-          ),
-        );
+    state = AuthState(status: authResult.authStatus, isLoading: false);
+    if (authResult.authStatus == AuthStatus.success) {
+      navigator.pop();
     }
+    scaffoldMessenger.showSnackBar(
+      SnackBar(
+        content: Text(authResult.message),
+      ),
+    );
   }
 
   Future<void> signUpUser({
@@ -109,36 +101,21 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     final navigator = Navigator.of(context, rootNavigator: true);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     state = state.copiedWithIsLoading(true);
-    final authMessage = await _authAPI.signUpUser(
+    final authResult = await _authAPI.signUpUser(
       phone: phone,
       otp: otp,
       name: name,
       email: email,
     );
-    state = AuthState(result: authMessage.authResult, isLoading: false);
-    switch (authMessage.authResult) {
-      case AuthResult.success:
-        navigator.pop();
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text(authMessage.message),
-          ),
-        );
-        return;
-      case AuthResult.failure:
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text(authMessage.message),
-          ),
-        );
-        return;
-      default:
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text(authMessage.message),
-          ),
-        );
+    state = AuthState(status: authResult.authStatus, isLoading: false);
+    if (authResult.authStatus == AuthStatus.success) {
+      navigator.pop();
     }
+    scaffoldMessenger.showSnackBar(
+      SnackBar(
+        content: Text(authResult.message),
+      ),
+    );
   }
 }
 
