@@ -1,0 +1,37 @@
+categories
+- All categories - Furniture, Mattresses, Home Decor, Furnishings, Kitchen and Dining, lamps and lightning, Home utility, Appliances, Modular(Web view)
+
+- monsoon madness = category ->furniture
+- let's get comfortable = category->furniture, sub category-> sofas
+- sleep better - clouddio = brand
+
+(T=> Title)
+
+T- shop by room 
+    --shop living room - custom items ->
+    T- Living room 
+        Sub Categories - sofas, settees and benches, sofa chairs, chairs, cabinets and sideboards, Tv and media units, center tables, dining sets,Bar furniture, Home decor, lightning, Furnishings, Home care, View all furniture (Category - Furniture)
+    T- We've got your style -- View all Styles
+        T- Mid-century modern-
+            --
+        T- Eclectic
+            C-Furniture, SC-Center Tables, SSC-Coffee tables, SSSC-Electic Coffee Tables(1 of 4)
+        T- Modern
+            C-Furniture, SC-Cabinets and SideBoards(All)
+        T- Contemporary
+            C-Furniture, SC-TV and Media Units, SSC-TV consoles, SSSC-Contemporary TV Consoles
+        T- Transitional
+            C-Furniture, SC-Dining Sets, SSC-4 seater Dining Sets, SSSC-Traditional 4 seater dining Sets
+        T- Traditional
+            C-Furniture, SC-Side Tables, SSC-End Tables, SSSC-Traditional End Tables
+    --Shop bedroom
+    --Shop Dining room
+    --Shop Study room
+
+T-What the fry deals
+   
+        
+- shop bedroom - custom items ->
+    T- bedroom
+    Sub  Categories - Beds, Bedside Tables, Chest of drawers, TV and Media Units, Furnishings, Decor, Mattresses, Lighting
+- shop dining room - 
