@@ -2,16 +2,17 @@
 
 A new Flutter project.
 
-To run this project -
-1 -> run - flutter pub get
-2 -> cd server - run - npm install
-3 -> Add IP in env.dart
-4 -> Configure /server/.env
-server/.env ->
-PORT = <YOUR_PORT>
-JWT_SECRET ='<YOUR_JWT_SECRET'
-MONGO_URL = '<YOUR_MONGO_DB_URL>/pepperfry?retryWrites=true&w=majority'
-
-TWILIO_ACCOUNT_SID = "YOUR_TWILIO_ACCOUNT_SID"
-TWILIO_AUTH_TOKEN = "YOUR_TWILIO_AUTH_TOKEN"
-TWILIO_SERVICE_SID = "YOUR_TWILIO_SERVICE_SID"
+To run this project -<br>
+1 -> run - flutter pub get<br>
+2 -> cd server - run - npm install<br>
+3 -> Add IP in env.dart<br>
+4 -> Configure /server/.env<br>
+<br>
+server/.env -><br>
+PORT = <YOUR_PORT><br>
+JWT_SECRET ='<YOUR_JWT_SECRET'<br>
+MONGO_URL = '<YOUR_MONGO_DB_URL>/pepperfry?retryWrites=true&w=majority'<br>
+<br>
+TWILIO_ACCOUNT_SID = "YOUR_TWILIO_ACCOUNT_SID"<br>
+TWILIO_AUTH_TOKEN = "YOUR_TWILIO_AUTH_TOKEN"<br>
+TWILIO_SERVICE_SID = "YOUR_TWILIO_SERVICE_SID"<br>
