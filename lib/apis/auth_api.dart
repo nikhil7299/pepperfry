@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pepperfry/constants/app_constants.dart';
-import 'package:pepperfry/core/auth_message.dart';
+import 'package:pepperfry/core/auth_result.dart';
 import 'package:pepperfry/core/enums.dart';
-import 'package:pepperfry/features/auth/controller/auth_controller.dart';
 import 'package:http/http.dart' as http;
+import 'package:pepperfry/env.dart';
+import 'package:pepperfry/features/auth/controller/user_controller.dart';
 import 'package:pepperfry/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,11 +14,24 @@ final authAPIProvider = Provider((ref) {
   );
 });
 
-class AuthAPI {
+abstract class IAuthAPI {
+  Future<bool> setAuthUser({required String? token});
+  Future<AuthResult> checkUser({required String phone});
+  Future<AuthResult> verifyPhone({required String phone, required String otp});
+  Future<AuthResult> signUpUser({
+    required String phone,
+    required String otp,
+    required String name,
+    required String email,
+  });
+}
+
+class AuthAPI implements IAuthAPI {
   final Ref _ref;
   const AuthAPI({required Ref ref}) : _ref = ref;
 
-  Future<bool> setAuthUser(String? token) async {
+  @override
+  Future<bool> setAuthUser({required String? token}) async {
     final url = '$uri/';
     try {
       http.Response res = await http.get(
@@ -42,7 +55,8 @@ class AuthAPI {
     }
   }
 
-  Future<AuthResult> checkUser(String phone) async {
+  @override
+  Future<AuthResult> checkUser({required String phone}) async {
     final url = '$uri/auth/checkUser';
     try {
       http.Response res = await http.post(
@@ -84,6 +98,7 @@ class AuthAPI {
     }
   }
 
+  @override
   Future<AuthResult> verifyPhone(
       {required String phone, required String otp}) async {
     final url = '$uri/auth/verifyPhone';
@@ -129,6 +144,7 @@ class AuthAPI {
     }
   }
 
+  @override
   Future<AuthResult> signUpUser({
     required String phone,
     required String otp,

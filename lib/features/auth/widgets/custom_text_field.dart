@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatefulWidget {
+  final TextInputType textInputType;
   final bool isPhone;
   final bool isEnabled;
   final TextEditingController? textEditingController;
@@ -10,7 +11,8 @@ class CustomTextField extends StatefulWidget {
       required this.hintText,
       this.textEditingController,
       required this.isEnabled,
-      required this.isPhone});
+      required this.isPhone,
+      required this.textInputType});
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -25,6 +27,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       enableInteractiveSelection: true,
       controller: widget.textEditingController,
       cursorColor: Colors.orange.shade900,
+      keyboardType: widget.textInputType,
       style: const TextStyle(fontSize: 12.3),
       // onChanged: (value) {
       //   final isParsed = int.tryParse(value);

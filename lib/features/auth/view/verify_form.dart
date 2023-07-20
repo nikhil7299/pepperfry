@@ -53,6 +53,7 @@ class _VerifyFormState extends ConsumerState<VerifyForm> {
             CustomTextField(
               isPhone: true,
               isEnabled: true,
+              textInputType: TextInputType.phone,
               hintText: AppConstants.enterPhone,
               textEditingController: phoneController,
             ),
@@ -63,7 +64,7 @@ class _VerifyFormState extends ConsumerState<VerifyForm> {
                 final navigator = Navigator.of(context);
                 final isRegistered = await ref
                     .read(authStateProvider.notifier)
-                    .checkUser(phoneController.text, context);
+                    .checkUser(phone: phoneController.text, context: context);
 
                 if (isRegistered) {
                   navigator.pushNamed(

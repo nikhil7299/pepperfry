@@ -55,6 +55,7 @@ class _CompleteSignUpFormState extends ConsumerState<CompleteSignUpForm> {
               isPhone: false,
               hintText: '+ 91 ${widget.phoneText}',
               isEnabled: false,
+              textInputType: TextInputType.phone,
             ),
             Align(
               alignment: Alignment.topLeft,
@@ -74,6 +75,7 @@ class _CompleteSignUpFormState extends ConsumerState<CompleteSignUpForm> {
             CustomTextField(
               isPhone: false,
               isEnabled: true,
+              textInputType: TextInputType.number,
               hintText: 'Enter OTP recieved on Mobile Number',
               textEditingController: otpController,
             ),
@@ -100,6 +102,7 @@ class _CompleteSignUpFormState extends ConsumerState<CompleteSignUpForm> {
               isPhone: false,
               hintText: "Enter Name",
               isEnabled: true,
+              textInputType: TextInputType.name,
               textEditingController: nameController,
             ),
             const SizedBox(height: 15),
@@ -107,6 +110,7 @@ class _CompleteSignUpFormState extends ConsumerState<CompleteSignUpForm> {
               isPhone: false,
               hintText: "Enter Email",
               isEnabled: true,
+              textInputType: TextInputType.emailAddress,
               textEditingController: emailController,
             ),
             const SizedBox(height: 15),

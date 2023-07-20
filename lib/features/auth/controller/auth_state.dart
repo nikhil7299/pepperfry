@@ -18,14 +18,12 @@ class AuthState {
   AuthState copiedWithIsLoading(bool isLoading) =>
       AuthState(status: status, isLoading: isLoading);
 
-// objects can be different, even if their value inside is same,
-// this makes sure to find if the objects are equal or not
-// identical checks if the objects are same, then return true
-// and if objects are not same(not same reference)
-// we check internal values are same or not and then return true
-
   @override
   String toString() => 'AuthState (AuthStatus: $status, isLoading: $isLoading)';
+
+  // objects can be different, even if their value inside is same,
+  // identical checks if the objects are pointing to the same memory location
+  // If not, we check if the internal values of objects are same or not
 
   @override
   bool operator ==(covariant AuthState other) =>

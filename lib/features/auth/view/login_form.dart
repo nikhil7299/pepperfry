@@ -62,6 +62,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             const SizedBox(height: 15),
             CustomTextField(
               isPhone: false,
+              textInputType: TextInputType.phone,
               hintText: '+ 91 ${widget.phoneText}',
               isEnabled: false,
             ),
@@ -83,6 +84,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             CustomTextField(
               isPhone: false,
               isEnabled: true,
+              textInputType: TextInputType.number,
               hintText: 'Enter OTP recieved on Mobile Number',
               textEditingController: otpController,
             ),

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pepperfry/apis/auth_api.dart';
 import 'package:pepperfry/core/enums.dart';
 import 'package:pepperfry/features/auth/controller/auth_state.dart';
-import 'package:pepperfry/models/user_info_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final isLoadingProvider = Provider<bool>((ref) {
@@ -39,7 +38,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       return;
     }
     state = state.copiedWithIsLoading(true);
-    final res = await _authAPI.setAuthUser(token);
+    final res = await _authAPI.setAuthUser(token: token);
     if (res) {
       state = const AuthState(status: AuthStatus.success, isLoading: false);
       return;
@@ -48,10 +47,13 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = state.copiedWithIsLoading(false);
   }
 
-  Future<bool> checkUser(String identifier, BuildContext context) async {
+  Future<bool> checkUser({
+    required String phone,
+    required BuildContext context,
+  }) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     state = state.copiedWithIsLoading(true);
-    final authResult = await _authAPI.checkUser(identifier);
+    final authResult = await _authAPI.checkUser(phone: phone);
     state = state.copiedWithIsLoading(false);
     if (authResult.authStatus == AuthStatus.success) {
       scaffoldMessenger.showSnackBar(
@@ -116,32 +118,5 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         content: Text(authResult.message),
       ),
     );
-  }
-}
-
-//? USER INFO STATE
-final isAdminProvider = Provider((ref) {
-  final userInfoState = ref.watch(userInfoStateProvider);
-  if (userInfoState == null) {
-    return false;
-  }
-  return userInfoState.type == 'admin';
-});
-
-final userInfoStateProvider =
-    StateNotifierProvider<UserInfoStateNotifier, UserInfoState?>((ref) {
-  return UserInfoStateNotifier();
-});
-
-class UserInfoStateNotifier extends StateNotifier<UserInfoState?> {
-  UserInfoStateNotifier() : super(null);
-
-  void setUser(String user) {
-    state = UserInfoState.fromJson(user);
-    print('user mobile ${state!.phone}');
-  }
-
-  void setUserFromModel(UserInfoState userInfoState) {
-    state = userInfoState;
   }
 }

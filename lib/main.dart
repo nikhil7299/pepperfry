@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pepperfry/core/loading_screen.dart';
 import 'package:pepperfry/features/admin/admin_view.dart';
 import 'package:pepperfry/features/auth/controller/auth_controller.dart';
+import 'package:pepperfry/features/auth/controller/user_controller.dart';
 import 'package:pepperfry/features/auth/view/auth_splash_view.dart';
 import 'package:pepperfry/features/home/view/home_view.dart';
 import 'package:pepperfry/state_logger.dart';
