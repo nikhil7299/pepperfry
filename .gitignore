@@ -31,7 +31,8 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-env.dart
+/lib/env.dart
+/lib/schema.txt
 /server/node_modules
 /server/.env
 
