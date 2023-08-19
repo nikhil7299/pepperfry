@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pepperfry/apis/auth_api.dart';
 import 'package:pepperfry/core/enums.dart';
+import 'package:pepperfry/core/storage_manager.dart';
 import 'package:pepperfry/features/auth/controller/auth_state.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final isLoadingProvider = Provider<bool>((ref) {
   final authState = ref.watch(authStateProvider);
@@ -16,7 +18,7 @@ final isLoggedInProvider = Provider<bool>((ref) {
   return authState.status == AuthStatus.success;
 });
 
-//? AUTH STATE
+// ? AUTH STATE
 final authStateProvider = StateNotifierProvider<AuthStateNotifier, AuthState>(
   (ref) => AuthStateNotifier(
     authAPI: ref.watch(authAPIProvider),
@@ -29,22 +31,17 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   AuthStateNotifier({
     required AuthAPI authAPI,
   })  : _authAPI = authAPI,
-        super(const AuthState.unknown());
-
-  void setAuthUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? token = prefs.getString('x-auth-token');
-    if (token == null) {
-      return;
-    }
-    state = state.copiedWithIsLoading(true);
-    final res = await _authAPI.setAuthUser(token: token);
-    if (res) {
-      state = const AuthState(status: AuthStatus.success, isLoading: false);
-      return;
-    }
-
-    state = state.copiedWithIsLoading(false);
+        super(const AuthState.unknown()) {
+    StorageManager.readData('x-auth-token').then((token) {
+      if (token != null) {
+        _authAPI.setAuthUser(token: token).then((res) {
+          if (res) {
+            state =
+                const AuthState(status: AuthStatus.success, isLoading: false);
+          }
+        });
+      }
+    });
   }
 
   Future<bool> checkUser({

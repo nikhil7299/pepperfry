@@ -8,14 +8,9 @@ import 'package:pepperfry/features/auth/view/auth_splash_view.dart';
 import 'package:pepperfry/features/home/view/home_view.dart';
 import 'package:pepperfry/state_logger.dart';
 
-import 'dart:developer' as devtools show log;
-
-extension Log on Object {
-  void log() => devtools.log(toString());
-}
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  // Stripe
   runApp(
     const ProviderScope(
       observers: [StateLogger()],
@@ -24,12 +19,13 @@ void main() {
   );
 }
 
-class MainApp extends ConsumerWidget {
+class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.read(authStateProvider.notifier).setAuthUser();
+  Widget build(BuildContext context) {
+    // => previous implementation
+    // ref.read(authStateProvider.notifier).setAuthUser();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

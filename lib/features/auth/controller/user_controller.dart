@@ -1,6 +1,6 @@
 //? USER INFO STATE
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pepperfry/main.dart';
+import 'package:pepperfry/core/dev_tools.dart';
 import 'package:pepperfry/models/user_info_state.dart';
 
 final isAdminProvider = Provider((ref) {

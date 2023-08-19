@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pepperfry/core/auth_result.dart';
+import 'package:pepperfry/core/dev_tools.dart';
 import 'package:pepperfry/core/enums.dart';
 import 'package:http/http.dart' as http;
 import 'package:pepperfry/env.dart';
 import 'package:pepperfry/features/auth/controller/user_controller.dart';
-import 'package:pepperfry/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final authAPIProvider = Provider((ref) {
@@ -41,6 +41,7 @@ class AuthAPI implements IAuthAPI {
           'x-auth-token': token!,
         },
       );
+      res.statusCode.log();
       res.body.log();
       if (res.statusCode == 200) {
         _ref.read(userInfoStateProvider.notifier).setUser(jsonEncode(
